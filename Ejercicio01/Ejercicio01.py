@@ -2,12 +2,14 @@ import vtk
 from vtk import *
 
 cone = vtk.vtkConeSource()
+cone.SetResolution(20)
 
 cone_mapper = vtk.vtkPolyDataMapper()
 cone_mapper.SetInputConnection(cone.GetOutputPort())
 
 cone_actor = vtk.vtkActor()
 cone_actor.SetMapper(cone_mapper)
+cone_actor.SetDiffuseColor("Red")
 
 renderer = vtk.vtkRenderer()
 renderer.AddActor(cone_actor)
