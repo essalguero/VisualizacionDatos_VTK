@@ -29,13 +29,8 @@ class MyInteractorStyle(vtk.vtkInteractorStyleTrackballCamera):
 
 np.random.seed()
 
-#Create a camera
-camera = vtkCamera()
-camera.SetPosition(0, 0, 4)
-
 #Create a renderer
 renderer = vtk.vtkRenderer()
-renderer.SetActiveCamera(camera)
 renderer.SetBackground(0,0,0.3)
 
 #Create a window
@@ -54,30 +49,30 @@ cylinder.SetResolution(20)
 #cylinder.SetCenter(0, -1.5, -2.5)
 
 
-# create a transform with the rotation info of the cone
-transform = vtk.vtkTransform()
-transform.RotateX(30)
 
-transformFilter = vtk.vtkTransformPolyDataFilter()
-transformFilter.SetTransform(transform)
-transformFilter.SetInputConnection(cylinder.GetOutputPort())
-transformFilter.Update()
 
 
 # mapper for original cone
 cylinder_mapper = vtk.vtkPolyDataMapper()
-cylinder_mapper.SetInputConnection(transformFilter.GetOutputPort())
+cylinder_mapper.SetInputConnection(cylinder.GetOutputPort())
 
 # actor for original cone
 cylinder_actor = vtk.vtkActor()
 cylinder_actor.SetMapper(cylinder_mapper)
+cylinder_actor.RotateX(30)
 
 #Set the color
-cylinder_actor.GetProperty().SetDiffuseColor(1.0, 0.1, 0)
+#Set the color
+cylinder_actor.GetProperty().SetDiffuseColor(1.0, 0, 0)
+cylinder_actor.GetProperty().SetDiffuse(.7)
+cylinder_actor.GetProperty().SetSpecular(0.2)
+cylinder_actor.GetProperty().SetSpecularColor(1.0, 1.0, 1.0)
 cylinder_actor.GetProperty().SetLighting(True)
 
 # assign actor to the renderer
 renderer.AddActor(cylinder_actor)
+renderer.ResetCamera()
+
 
 # enable user interface interactor
 interactor.SetInteractorStyle(MyInteractorStyle(cylinder_actor))
